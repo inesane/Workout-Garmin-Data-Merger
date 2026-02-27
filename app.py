@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 import zipfile
 import os
+import pytz
 
 st.set_page_config(page_title="Workout × Garmin", layout="wide")
 
@@ -228,6 +229,10 @@ st.title("🏋️ Workout × Garmin Set-Level HR")
 # Sidebar: app selector
 selected_app = st.sidebar.selectbox("Workout App", ["Lyfta", "Strong"])
 
+_tz_list = pytz.common_timezones
+_tz_default = _tz_list.index("Europe/Berlin") if "Europe/Berlin" in _tz_list else 0
+tz_name = st.sidebar.selectbox("Timezone", _tz_list, index=_tz_default)
+
 workout_file = st.sidebar.file_uploader(f"{selected_app} CSV", type=["csv"])
 fit_files = st.sidebar.file_uploader(
     "Garmin FIT / ZIP files",
@@ -259,14 +264,17 @@ if workout_file and fit_files:
         else:
             workout_df = parse_strong_csv(workout_file)
 
-        # Load all FIT files and extract start times
+        # Load all FIT files and convert UTC → local time using selected timezone
+        tz = pytz.timezone(tz_name)
         workouts = []
         for f in fit_files:
             b = load_fit_bytes(f)
-            start = extract_activity_start(b)
+            start_utc = extract_activity_start(b)
+            offset = tz.utcoffset(start_utc.to_pydatetime())
+            start_local = start_utc + offset
             workouts.append({
-                "label": start.strftime("%Y-%m-%d %H:%M"),
-                "start": start,
+                "label": start_local.strftime("%Y-%m-%d %H:%M"),
+                "start": start_local,
                 "bytes": b
             })
 

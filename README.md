@@ -32,13 +32,14 @@ The demo also includes sample Lyfta data so you can explore the UI without uploa
   - **Download merged data as CSV**
   - **Per-set HR graphs** (one collapsible expander per set)
   - **Full workout HR timeline** with set regions highlighted and labeled
-  - **Cross-exercise comparison** for the selected workout:
-    - Summary table: exercise → avg HR, max HR, sets, total volume
-    - Side-by-side horizontal bar charts: avg HR and max HR by exercise
-- **Exercise History tab** — track a single exercise across all uploaded workouts:
-  - Per-set table with date, weight, reps, avg HR, max HR, estimated 1RM
-  - Avg HR over time (line chart)
-  - Estimated 1RM over time using the **Epley formula** (`weight × (1 + reps/30)`), taking the best set per day as the strength progression metric
+  - **Per-set HR graphs**
+  - **Per-set metrics**:
+    - Exercise name
+    - Weight × reps
+    - Average HR
+    - Max HR
+    - Sample count
+- Supports **multiple Garmin activities** → select a workout and drill down
 
 ---
 
@@ -153,4 +154,3 @@ Select any exercise that appears across your uploaded workouts. The page shows:
 
 MIT License — feel free to fork, modify, and build on top of this.
 
----
